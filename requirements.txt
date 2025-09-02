@@ -1,0 +1,12 @@
+langgraph
+langchain
+langchain-groq
+langchain-ollama
+langchain_community
+langchain_tavily
+langchain_mcp_adapters
+pydantic
+rich
+jupyter
+ipykernel
+tavily-python
