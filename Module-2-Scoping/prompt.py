@@ -5,43 +5,30 @@ including user clarification, research brief generation, and report synthesis.
 """
 
 clarify_with_user_instructions="""
-These are the messages that have been exchanged so far from the user asking for the report:
+You are an AI assistant responsible for clarifying a user's research request.
+Your task is to analyze the user's messages and determine if you have enough information to proceed with the research.
+
+**Today's Date:** {date}
+
+**Conversation History:**
 <Messages>
 {messages}
 </Messages>
 
-Today's date is {date}.
+**Your Instructions:**
 
-Assess whether you need to ask a clarifying question, or if the user has already provided enough information for you to start research.
-IMPORTANT: If you can see in the messages history that you have already asked a clarifying question, you almost always do not need to ask another one. Only ask another question if ABSOLUTELY NECESSARY.
+1.  **Assess for Clarity:** Review the conversation history to see if the user's request is clear.
+    *   Have they specified the key topics, entities, and the desired outcome of the report?
+    *   Are there any acronyms or ambiguous terms that need clarification?
 
-If there are acronyms, abbreviations, or unknown terms, ask the user to clarify.
-If you need to ask a question, follow these guidelines:
-- Be concise while gathering all necessary information
-- Make sure to gather all the information needed to carry out the research task in a concise, well-structured manner.
-- Use bullet points or numbered lists if appropriate for clarity. Make sure that this uses markdown formatting and will be rendered correctly if the string output is passed to a markdown renderer.
-- Don't ask for unnecessary information, or information that the user has already provided. If you can see that the user has already provided the information, do not ask for it again.
+2.  **Avoid Redundant Questions:** If you have already asked a clarifying question in the message history, do not ask another one unless it is absolutely critical for understanding the core task.
 
-Respond in valid JSON format with these exact keys:
-"need_clarification": boolean,
-"question": "<question to ask the user to clarify the report scope>",
-"verification": "<verification message that we will start research>"
+3.  **Decide and Respond using the Tool:** Based on your assessment, you must use the `ClarifyWithUser` tool to respond.
 
-If you need to ask a clarifying question, return:
-"need_clarification": true,
-"question": "<your clarifying question>",
-"verification": ""
+    *   **If the request is unclear:** Set `need_clarification` to `true` and formulate a concise question. Your question should be designed to gather all the necessary information. Use markdown (like bullet points) for clarity if needed.
+    *   **If the request is clear:** Set `need_clarification` to `false` and provide a brief, professional verification message confirming you are starting the research. Summarize your understanding of their request in the verification message.
 
-If you do not need to ask a clarifying question, return:
-"need_clarification": false,
-"question": "",
-"verification": "<acknowledgement message that you will now start research based on the provided information>"
-
-For the verification message when no clarification is needed:
-- Acknowledge that you have sufficient information to proceed
-- Briefly summarize the key aspects of what you understand from their request
-- Confirm that you will now begin the research process
-- Keep the message concise and professional
+**IMPORTANT:** You must respond by calling the `ClarifyWithUser` tool with the appropriate arguments. Do not respond with a plain string.
 """
 
 transform_messages_into_research_topic_prompt = """You will be given a set of messages that have been exchanged so far between yourself and the user. 
